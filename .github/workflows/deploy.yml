@@ -8,6 +8,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
     
     steps:
       - name: Checkout code
@@ -15,9 +18,17 @@ jobs:
       
       - name: Inject Secrets into HTML
         run: |
-          sed -i "s|{{ADMIN_PASSWORD}}|${{ secrets.ADMIN_PASSWORD }}|g" index.html
-          sed -i "s|{{LIBRARIAN_PASSWORD}}|${{ secrets.LIBRARIAN_PASSWORD }}|g" index.html
-          sed -i "s|{{STAFF_PASSWORD}}|${{ secrets.STAFF_PASSWORD }}|g" index.html
+          echo "Checking for placeholders..."
+          if grep -q "{{ADMIN_PASSWORD}}" index.html; then
+            echo "Found placeholders, injecting secrets..."
+            sed -i "s|{{ADMIN_PASSWORD}}|${{ secrets.ADMIN_PASSWORD }}|g" index.html
+            sed -i "s|{{LIBRARIAN_PASSWORD}}|${{ secrets.LIBRARIAN_PASSWORD }}|g" index.html
+            sed -i "s|{{STAFF_PASSWORD}}|${{ secrets.STAFF_PASSWORD }}|g" index.html
+            echo "Secrets injected successfully"
+          else
+            echo "ERROR: Placeholders not found!"
+            exit 1
+          fi
       
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -25,3 +36,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
           publish_branch: gh-pages
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
