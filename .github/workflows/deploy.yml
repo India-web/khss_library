@@ -15,16 +15,9 @@ jobs:
       
       - name: Inject Secrets into HTML
         run: |
-          # Replace placeholders with actual secrets
           sed -i "s|{{ADMIN_PASSWORD}}|${{ secrets.ADMIN_PASSWORD }}|g" index.html
           sed -i "s|{{LIBRARIAN_PASSWORD}}|${{ secrets.LIBRARIAN_PASSWORD }}|g" index.html
           sed -i "s|{{STAFF_PASSWORD}}|${{ secrets.STAFF_PASSWORD }}|g" index.html
-          
-          # Add build timestamp
-          echo "<!-- Built on: $(date) -->" >> index.html
-          
-          # Show that injection worked (for debugging)
-          echo "Secrets injection completed at $(date)"
       
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
