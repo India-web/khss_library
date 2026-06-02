@@ -152,36 +152,10 @@
 // Passwords are injected by GitHub Actions - never stored in code!
 
 let AUTHORIZED_USERS = {
-  admin: { 
-    password: "{{ADMIN_PASSWORD}}",  // Replaced by GitHub Actions
-    name: "Administrator", 
-    role: "Admin", 
-    permissions: ["all"], 
-    username: "admin" 
-  },
-  librarian: { 
-    password: "{{LIBRARIAN_PASSWORD}}",  // Replaced by GitHub Actions
-    name: "Head Librarian", 
-    role: "Librarian", 
-    permissions: ["view", "add", "edit", "delete", "import", "export"], 
-    username: "librarian" 
-  },
-  staff1: { 
-    password: "{{STAFF_PASSWORD}}",  // Replaced by GitHub Actions
-    name: "Library Staff", 
-    role: "Staff", 
-    permissions: ["view", "issue", "return"], 
-    username: "staff1" 
-  }
+  admin: { password: "{{ADMIN_PASSWORD}}", name: "Administrator", role: "Admin", permissions: ["all"], username: "admin" },
+  librarian: { password: "{{LIBRARIAN_PASSWORD}}", name: "Head Librarian", role: "Librarian", permissions: ["view", "add", "edit", "delete", "import", "export"], username: "librarian" },
+  staff1: { password: "{{STAFF_PASSWORD}}", name: "Library Staff", role: "Staff", permissions: ["view", "issue", "return"], username: "staff1" }
 };
-
-// Local development fallback (only works on your computer)
-if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-  console.log("⚠️ Running in development mode");
-  AUTHORIZED_USERS.admin.password = "khss123";
-  AUTHORIZED_USERS.librarian.password = "khss456";
-  AUTHORIZED_USERS.staff1.password = "khss789";
-}
 
     let currentUser = null;
     
